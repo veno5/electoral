@@ -1,0 +1,23 @@
+{
+  "id": "./",
+  "name": "ElectroHogar — Tu hogar, más fácil",
+  "short_name": "ElectroHogar",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1267a5",
+  "theme_color": "#1267a5",
+  "icons": [
+    {
+      "src": "./icon-192.png?v=33",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png?v=33",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "description": "ElectroHogar · Tu hogar, más fácil"
+}

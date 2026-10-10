@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1677ff">
+<title>ElectroHogar 3.3</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f7fb;color:#172033}
+header{background:#1677ff;color:#fff;padding:18px;text-align:center}
+main{max-width:900px;margin:auto;padding:18px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 12px #0001}
+.card img{width:100%;height:160px;object-fit:cover;border-radius:10px;background:#e8eef7}
+button{background:#1677ff;color:#fff;border:0;border-radius:9px;padding:10px 14px;cursor:pointer}
+input,select{width:100%;padding:9px;margin:5px 0 10px;box-sizing:border-box}
+nav{display:flex;gap:8px;justify-content:center;margin:12px 0}.hide{display:none}
+.badge{background:#eaf2ff;padding:5px 8px;border-radius:8px;display:inline-block}
+</style>
+<style>
+.product-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;width:100%;margin-bottom:10px}
+.product-gallery img{width:100%;height:95px;object-fit:contain;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;cursor:zoom-in;transition:transform .18s ease,box-shadow .18s ease}
+.product-gallery img:hover{transform:scale(1.05);box-shadow:0 5px 18px rgba(0,0,0,.18)}
+#visorImagen{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);align-items:center;justify-content:center;padding:18px}
+#visorImagen.activo{display:flex}
+#visorImagen img{max-width:94vw;max-height:90vh;object-fit:contain;background:white;border-radius:12px}
+#visorImagen .cerrarVisor{position:absolute;top:12px;right:18px;font-size:38px;color:white;background:transparent;border:0;cursor:pointer}
+@media(max-width:600px){.product-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.product-gallery img{height:110px}}
+</style>
+
+<style id="electrohogar-pro-ui">
+:root{
+  --eh-bg:#eef5fb; --eh-card:#ffffff; --eh-text:#172033; --eh-muted:#64748b;
+  --eh-blue:#1769aa; --eh-blue2:#0f4f86; --eh-border:#dce7f1;
+  --eh-shadow:0 10px 30px rgba(31,78,121,.10);
+}
+*{box-sizing:border-box}
+body{
+  margin:0!important;
+  background:linear-gradient(145deg,#eaf4fc 0%,#f8fbfe 48%,#edf5fa 100%)!important;
+  color:var(--eh-text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:radial-gradient(circle at 8% 8%,rgba(23,105,170,.10),transparent 25%),
+             radial-gradient(circle at 92% 15%,rgba(56,189,248,.10),transparent 22%);
+}
+header{
+  background:linear-gradient(120deg,var(--eh-blue2),var(--eh-blue))!important;
+  color:white!important;padding:18px 22px!important;box-shadow:0 8px 25px rgba(15,79,134,.20);
+  position:sticky;top:0;z-index:1000;
+}
+header h1{margin:0!important;font-size:clamp(22px,3vw,31px)!important;letter-spacing:-.5px}
+header h1:after{content:"  •  Tu hogar, más fácil";font-size:12px;font-weight:500;opacity:.78;letter-spacing:0}
+nav{display:flex!important;gap:8px!important;flex-wrap:wrap!important;margin-top:12px!important}
+nav button{
+  border:1px solid rgba(255,255,255,.28)!important;background:rgba(255,255,255,.13)!important;
+  color:#fff!important;border-radius:12px!important;padding:9px 13px!important;font-weight:700!important;
+  box-shadow:none!important;transition:.18s ease!important;
+}
+nav button:hover{background:#fff!important;color:var(--eh-blue2)!important;transform:translateY(-1px)}
+main,section{max-width:1200px;margin-left:auto!important;margin-right:auto!important}
+section{padding:22px 18px!important}
+h2{font-size:clamp(21px,2.6vw,29px);letter-spacing:-.4px;margin-top:0;color:#173b5e}
+.card{
+  background:var(--eh-card)!important;border:1px solid var(--eh-border)!important;border-radius:18px!important;
+  box-shadow:var(--eh-shadow)!important;padding:15px!important;overflow:hidden;
+  transition:transform .18s ease,box-shadow .18s ease!important;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 15px 36px rgba(31,78,121,.15)!important}
+#lista{
+  display:grid!important;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))!important;
+  gap:18px!important;align-items:start!important;
+}
+.product-gallery{
+  background:#f7fafc;border-radius:14px;padding:7px;overflow:hidden;
+}
+.product-gallery img{background:#fff!important;border-color:#e6edf3!important}
+.card b{color:#142f49}
+.badge{border-radius:999px!important;padding:5px 9px!important;background:#e8f2fb!important;color:#14558a!important}
+input,select,textarea{
+  width:100%;border:1px solid #cad9e6!important;border-radius:12px!important;padding:11px 12px!important;
+  background:#fff!important;color:var(--eh-text)!important;outline:none;transition:.15s!important;
+}
+input:focus,select:focus,textarea:focus{border-color:#3b82b8!important;box-shadow:0 0 0 3px rgba(59,130,184,.12)!important}
+button{
+  border:0;border-radius:11px!important;padding:10px 13px!important;font-weight:700!important;cursor:pointer;
+  transition:transform .15s ease,filter .15s ease!important;
+}
+button:hover{filter:brightness(.97);transform:translateY(-1px)}
+#items .card,#listaHistorial .card{margin-bottom:14px!important}
+#buscarVenta{max-width:520px;margin-bottom:16px}
+.hide{display:none!important}
+@media(max-width:700px){
+  header{padding:14px 13px 11px!important}
+  header h1{text-align:center}
+  header h1:after{display:block;margin-top:3px}
+  nav{justify-content:center;gap:5px!important}
+  nav button{font-size:12px!important;padding:8px 9px!important}
+  section{padding:16px 11px 88px!important}
+  #lista{grid-template-columns:1fr!important;gap:13px!important}
+  .card{border-radius:15px!important;padding:12px!important}
+  .product-gallery{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(min-width:701px) and (max-width:1000px){
+  #lista{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+</style>
+
+<style id="electrohogar-menu-fix">
+header nav{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  max-height:none!important;
+  overflow:visible!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  margin-top:12px!important;
+}
+header nav button{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-height:38px!important;
+  background:#ffffff!important;
+  color:#14558a!important;
+  border:1px solid rgba(255,255,255,.95)!important;
+  box-shadow:0 3px 10px rgba(0,0,0,.12)!important;
+  font-weight:800!important;
+}
+header nav button:hover{
+  background:#eaf4fc!important;
+  color:#0f4f86!important;
+}
+@media(max-width:700px){
+  header nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:100%!important}
+  header nav button{width:100%!important;font-size:12px!important}
+}
+</style>
+
+<style id="menu-contraste-final">
+header nav button{
+  background:#ffffff!important;
+  color:#0b3f6c!important;
+  border:2px solid #d7e9f7!important;
+  opacity:1!important;
+  font-weight:900!important;
+  text-shadow:none!important;
+  box-shadow:0 3px 10px rgba(0,0,0,.18)!important;
+}
+header nav button *{
+  color:#0b3f6c!important;
+  opacity:1!important;
+}
+header nav button:hover,
+header nav button:focus{
+  background:#dff0ff!important;
+  color:#082f52!important;
+  border-color:#ffffff!important;
+}
+</style>
+
+<style id="menu-visibilidad-real-final">
+header nav .menu-principal-btn,
+header nav .menu-principal-btn:link,
+header nav .menu-principal-btn:visited{
+  display:inline-flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  background-color:#ffffff!important;
+  background-image:none!important;
+  color:#073b66!important;
+  -webkit-text-fill-color:#073b66!important;
+  border:2px solid #b9d8ee!important;
+  font-weight:900!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+header nav .menu-principal-btn:hover,
+header nav .menu-principal-btn:focus,
+header nav .menu-principal-btn:focus-visible,
+header nav .menu-principal-btn:active{
+  background-color:#dcefff!important;
+  background-image:none!important;
+  color:#052f52!important;
+  -webkit-text-fill-color:#052f52!important;
+  opacity:1!important;
+  border-color:#8fc1e4!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+</style>
+
+<style id="menu-azul-permanente">
+header nav button,
+header nav button:hover,
+header nav button:focus,
+header nav button:focus-visible,
+header nav button:active{
+ background:#1267a5!important;
+ background-color:#1267a5!important;
+ background-image:none!important;
+ color:#fff!important;
+ -webkit-text-fill-color:#fff!important;
+ opacity:1!important;
+ visibility:visible!important;
+ border:2px solid #fff!important;
+ font-weight:900!important;
+ text-shadow:none!important;
+ filter:none!important;
+}
+</style>
+
+<style id="electrohogar-tienda-pro">
+.hero-tienda{
+  display:flex;justify-content:space-between;align-items:center;gap:18px;
+  background:linear-gradient(125deg,#0e5f9e,#2388c9);
+  color:#fff;border-radius:22px;padding:24px 26px;margin-bottom:18px;
+  box-shadow:0 14px 32px rgba(14,95,158,.18);
+}
+.hero-tienda h2{color:#fff;margin:3px 0 5px;font-size:clamp(23px,3.2vw,36px)}
+.hero-tienda p{margin:0;opacity:.9;font-weight:600}
+.hero-mini{font-size:11px;font-weight:900;letter-spacing:1.8px;opacity:.8}
+.hero-icon{width:72px;height:72px;display:grid;place-items:center;border-radius:20px;background:rgba(255,255,255,.16);font-size:40px}
+.herramientas-catalogo{background:#fff;border:1px solid #dce7f1;border-radius:17px;padding:12px;margin-bottom:18px;box-shadow:0 7px 22px rgba(31,78,121,.07)}
+#buscarProducto{font-size:15px;margin-bottom:10px}
+.categorias{display:flex;gap:7px;overflow-x:auto;padding:2px 0 3px;scrollbar-width:thin}
+.categorias button{white-space:nowrap;background:#edf5fb!important;color:#155986!important;border:1px solid #d5e6f2!important;padding:8px 13px!important}
+.categorias button.cat-activa{background:#1267a5!important;color:#fff!important;border-color:#1267a5!important}
+#lista .card{position:relative}
+#lista .card>div:first-child{margin-bottom:7px}
+.mobile-bottom-nav{display:none}
+@media(max-width:700px){
+  header nav{display:none!important}
+  .hero-tienda{padding:18px 16px;border-radius:17px}
+  .hero-icon{width:52px;height:52px;font-size:30px;border-radius:15px}
+  .hero-tienda p{font-size:13px}
+  .herramientas-catalogo{padding:10px;border-radius:14px}
+  .mobile-bottom-nav{
+    display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:9990;
+    background:rgba(255,255,255,.97);border-top:1px solid #d9e5ef;box-shadow:0 -6px 20px rgba(31,78,121,.12);
+    padding:7px max(6px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));
+  }
+  .mobile-bottom-nav button{
+    background:transparent!important;color:#164d75!important;border:0!important;box-shadow:none!important;
+    padding:5px 2px!important;font-size:10px!important;display:flex!important;flex-direction:column;align-items:center;gap:2px;
+  }
+  .mobile-bottom-nav button span{font-size:20px;line-height:22px}
+}
+</style>
+
+<style id="seguridad-admin-ui">
+body:not(.modo-admin) .solo-admin{display:none!important}
+.admin-status{font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;background:#e8f2fb;color:#14558a}
+body.modo-admin .admin-status{background:#dcfce7;color:#166534}
+#adminLoginBox{max-width:430px;margin:30px auto;background:#fff;border:1px solid #dce7f1;border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(31,78,121,.12)}
+#adminLoginBox input{margin:10px 0}
+.admin-logout{background:#b42318!important;color:#fff!important}
+</style>
+<style>
+.badge-pedidos{display:inline-flex;min-width:20px;height:20px;padding:0 6px;align-items:center;justify-content:center;border-radius:999px;background:#dc2626;color:#fff;font-size:11px;font-weight:900;margin-left:5px}
+.pedido-card{background:#fff;border:1px solid #dbe7f1;border-radius:16px;padding:15px;margin:12px 0;box-shadow:0 7px 20px rgba(31,78,121,.08)}
+.pedido-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 14px}.pedido-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pedido-actions button{flex:1}
+@media(max-width:650px){.pedido-grid{grid-template-columns:1fr}}
+</style>
+<style id="botones-admin-linea-fix">
+body:not(.modo-admin) #productos .solo-admin{display:none!important}
+body.modo-admin #productos .solo-admin{display:block!important}
+</style>
+<link rel="manifest" href="./manifest.webmanifest?v=33"><meta name="theme-color" content="#1267a5"><style id="eh-backup-polish">.eh-respaldo{margin:16px 0;padding:18px;border:1px solid #c9e1f4;border-radius:18px;background:linear-gradient(125deg,#fff,#eef7ff);box-shadow:0 8px 24px #1b629014}.eh-respaldo h3{margin:0 0 8px;color:#104a78}.eh-respaldo p{color:#46647a;font-size:14px;line-height:1.5}.eh-respaldo .eh-actions{display:flex;flex-wrap:wrap;gap:9px}.eh-respaldo button{min-height:44px}.eh-respaldo button.secondary{background:#176b57!important}.eh-respaldo small{display:block;margin-top:10px;color:#566c7d}.card button:focus-visible,nav button:focus-visible{outline:3px solid #f6b846;outline-offset:2px}@media(max-width:600px){.eh-respaldo{padding:14px}.eh-respaldo .eh-actions button{width:100%}}</style><style id="eh-mobile-v3">:root{--eh-blue:#1267a5}body{background:linear-gradient(155deg,#e4f2ff,#f8fbff 45%,#e9f5ff)!important}header{background:linear-gradient(130deg,#083963,#147cbe 70%,#22a8d2)!important}header h1{letter-spacing:.2px!important}header h1:after{content:""!important}.eh-tagline{font-weight:700;font-size:13px;color:#e3f5ff}.eh-version{display:inline-block;margin-top:7px;font-size:11px;background:#ffffff2b;border:1px solid #ffffff55;padding:4px 9px;border-radius:30px;color:white}.eh-respaldo{border:2px solid #69bce8!important;background:linear-gradient(120deg,#f7fdff,#dff2ff)!important}.eh-respaldo h3{font-size:20px}.eh-pull{position:fixed;top:0;left:50%;transform:translate(-50%,-130%);z-index:99999;background:#084e7f;color:#fff;border-radius:0 0 15px 15px;padding:11px 18px;transition:transform .2s;font-weight:800;box-shadow:0 6px 20px #0002}.eh-pull.active{transform:translate(-50%,0)}@media(max-width:700px){header{position:relative!important}header h1{font-size:27px!important}.hero-tienda{background:linear-gradient(130deg,#064575,#117db9,#19a8c9)!important;box-shadow:0 10px 24px #004c8050}.mobile-bottom-nav{background:#f9fdff!important}.mobile-bottom-nav button{font-size:11px!important;min-height:52px!important}.card{box-shadow:0 8px 22px #0b558518!important}input,select{font-size:16px!important}} </style><style id="eh-33-estilo">.eh-inicial-general{margin:12px 0;padding:12px;border:1px solid #b8d9f0;border-radius:12px;background:#f1f8ff}.eh-inicial-general input{margin:7px 0!important}.eh-inicial-general small{font-size:12px;color:#46647a}#ehRespaldo{max-width:440px;margin:9px 0 14px auto!important;padding:0!important;border-radius:14px!important;overflow:hidden}#ehRespaldo summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:14px;font-weight:800;color:#104a78}#ehRespaldo summary::-webkit-details-marker{display:none}#ehRespaldo[open]{padding:0 12px 12px!important}#ehRespaldo .eh-actions button{flex:1 1 140px;min-height:38px!important;width:auto!important;font-size:12px;padding:9px!important}#ehRespaldo p{font-size:12px!important}@media(max-width:600px){#ehRespaldo{max-width:100%}}</style><link rel="apple-touch-icon" sizes="192x192" href="./icon-192.png?v=33"><meta name="apple-mobile-web-app-title" content="ElectroHogar"></head>
+<body>
+<header><h1>ElectroHogar</h1><div class="eh-tagline">Tu hogar, más fácil · Electrodomésticos y crédito</div><div class="eh-version">Versión 3.1 · 10/10/2026</div></header>
+<nav><button class="menu-principal-btn" onclick="show('catalogo')" style="background:#1267a5 !important;background-color:#1267a5 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;opacity:1 !important;visibility:visible !important;border:2px solid #ffffff !important;font-weight:900 !important;text-shadow:none !important;">Catálogo</button><button class="menu-principal-btn" onclick="abrirAdmin('admin')" style="background:#1267a5 !important;background-color:#1267a5 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;opacity:1 !important;visibility:visible !important;border:2px solid #ffffff !important;font-weight:900 !important;text-shadow:none !important;">Administrador</button><button class="menu-principal-btn" onclick="show('carrito')" style="background:#1267a5 !important;background-color:#1267a5 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;opacity:1 !important;visibility:visible !important;border:2px solid #ffffff !important;font-weight:900 !important;text-shadow:none !important;">Carrito (<span id="ncart">0</span>)</button><button class="menu-principal-btn" onclick="show('historial')" style="background:#1267a5 !important;background-color:#1267a5 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;opacity:1 !important;visibility:visible !important;border:2px solid #ffffff !important;font-weight:900 !important;text-shadow:none !important;">Historial de ventas</button><button class="menu-principal-btn" id="btnActualizar" onclick="actualizarApp()" style="background:#1267a5 !important;background-color:#1267a5 !important;color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;opacity:1 !important;visibility:visible !important;border:2px solid #ffffff !important;font-weight:900 !important;text-shadow:none !important;">Actualizar</button><button onclick="abrirPedidosAdmin()" style="background:#1267a5!important;color:#fff!important">Pedidos <span id="badgePedidosNav" class="badge-pedidos">0</span></button></nav>
+<input id="editarImagenCatalogo" type="file" accept="image/*" style="display:none" onchange="guardarImagenCatalogo(this)">
+<div id="ehPull" class="eh-pull">↻ Actualizando…</div><main>
+<section id="catalogo">
+<div class="hero-tienda">
+  <div>
+    <div class="hero-mini">ELECTROHOGAR</div>
+    <h2>Electrodomésticos para tu hogar</h2>
+    <p>Compra al contado o elige tu plan de crédito.</p>
+  </div>
+  <div class="hero-icon">⌂</div>
+</div>
+<div class="herramientas-catalogo">
+  <input id="buscarProducto" type="search" placeholder="🔎 Buscar nevera, lavadora, aire..." oninput="filtrarCatalogo()">
+  <div class="categorias">
+    <button class="cat-activa" onclick="seleccionarCategoria('Todos',this)">Todos</button>
+    <button onclick="seleccionarCategoria('Neveras',this)">Neveras</button>
+    <button onclick="seleccionarCategoria('Lavadoras',this)">Lavadoras</button>
+    <button onclick="seleccionarCategoria('Aires',this)">Aires</button>
+    <button onclick="seleccionarCategoria('Estufas',this)">Estufas</button>
+    <button onclick="seleccionarCategoria('Otros',this)">Otros</button>
+  </div>
+</div>
+<h2>Productos</h2><div id="productos" class="grid"></div></section>
+<section id="admin" class="hide"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 id="tituloAdmin">Agregar artículo</h2><button class="admin-logout" onclick="cerrarSesionAdmin()">Cerrar sesión</button></div>
+<details class="eh-respaldo solo-admin" id="ehRespaldo"><summary>💾 Copia de seguridad ▾</summary><h3>💾 Copia de seguridad</h3><p>Guarda tus productos, fotos, pedidos e historial de ventas en un archivo. Consérvalo en un lugar privado: puede contener datos personales de clientes.</p><div class="eh-actions"><button type="button" onclick="exportarRespaldoEH()">Descargar copia de seguridad</button><button type="button" class="secondary" onclick="document.getElementById('archivoRespaldoEH').click()">Restaurar copia</button></div><input type="file" id="archivoRespaldoEH" accept=".json,application/json" hidden onchange="importarRespaldoEH(this)"><small>Restaurar reemplaza los datos actuales de este navegador. Descarga primero una copia de los datos que tengas.</small></details>
+<div class="card">
+<input id="nombre" placeholder="Nombre del artículo">
+<label><b>Fotos del artículo (hasta 4)</b></label>
+<input id="fotosProductoV9" type="file" accept="image/*" multiple>
+<button type="button" id="btnPrepararFotosV9" onclick="prepararFotosV9()" style="background:#2563eb;margin-bottom:8px">Cargar fotos seleccionadas</button>
+<div id="previewFotosV9" style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:8px 0"></div>
+<div id="estadoFotosV9" style="font-size:13px;color:#166534;font-weight:800;margin-bottom:10px">Primero selecciona las fotos y luego pulsa “Cargar fotos seleccionadas”.</div>
+<label>Cantidad disponible</label><input id="cantidad" type="number" min="0" step="1" value="1">
+<label>Precio de costo (solo administrador)</label><input id="costo" type="number" min="0" step="0.01" placeholder="Lo que pagaste · RD$" oninput="calcularGanancia()">
+<label>Precio de venta (visible al público)</label><input id="contado" type="number" min="0" step="0.01" placeholder="Precio al cliente · RD$" oninput="calcularGanancia()">
+<div class="eh-inicial-general"><label for="inicialGeneral"><b>Inicial (RD$)</b></label><input id="inicialGeneral" type="number" min="0" step="0.01" placeholder="Ejemplo: 5000" oninput="sincronizarInicialGeneral()"><small>Inicial principal. Al cambiarlo, se aplica a los planes de 12, 18 y 24 meses; luego puedes ajustar cada plazo por separado.</small></div>
+<div id="resumenGanancia" style="background:#e8f4ff;border:1px solid #b5d8f4;color:#073c66;padding:12px;border-radius:12px;margin:10px 0;font-weight:700">Ganancia estimada: —</div>
+<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px;margin:12px 0">
+<b style="color:#124b83">Inicial por plazo de crédito</b>
+<p style="font-size:13px;margin:5px 0 12px">Configura un inicial diferente para cada plan. El cliente verá el inicial y la cuota de su plan.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px">
+<div><label>Inicial · 12 meses</label><input id="inicial12" type="number" min="0" step="0.01" placeholder="RD$ 5,000"></div>
+<div><label>Inicial · 18 meses</label><input id="inicial18" type="number" min="0" step="0.01" placeholder="RD$ 7,000"></div>
+<div><label>Inicial · 24 meses</label><input id="inicial24" type="number" min="0" step="0.01" placeholder="RD$ 10,000"></div>
+</div></div>
+<button onclick="guardar()">Guardar artículo</button>
+</div></section>
+<section id="carrito" class="hide"><h2>Carrito</h2><div id="items"></div></section>
+<section id="historial" class="hide"><h2>Historial de ventas</h2>
+<input id="buscarVenta" placeholder="Buscar por cliente, teléfono o producto" oninput="renderHistorial(this.value)">
+<div id="listaHistorial"></div></section>
+
+<section id="pedidos" class="hide">
+<h2>📦 Pedidos nuevos <span id="badgePedidosTitulo" class="badge-pedidos">0</span></h2>
+<p>Solicitudes pendientes de revisión del administrador.</p><div id="listaPedidos"></div>
+<button onclick="show('catalogo')" style="background:#64748b;color:white">Volver</button>
+</section>
+<section id="adminLogin" class="hide" style="position:relative;z-index:2000">
+ <div id="adminLoginBox">
+   <h2>🔒 Acceso de administrador</h2>
+   <p>Esta área es privada. Introduce tu PIN para continuar.</p>
+   <input id="adminPin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN de administrador" onkeydown="if(event.key==='Enter')validarAdmin()">
+   <button onclick="validarAdmin()" style="background:#1267a5;color:white;width:100%">Entrar</button>
+   <button onclick="show('catalogo')" style="background:#64748b;color:white;width:100%;margin-top:8px">Cancelar</button>
+   <p style="font-size:12px;color:#64748b;margin-top:14px">Protección local provisional. Cuando ElectroHogar esté en línea, se sustituirá por un acceso seguro con servidor.</p>
+ </div>
+</section>
+</main>
+<script>
+
+const EH_DB='ElectroHogarFotosDB', EH_STORE='fotos';
+function dbFotos(){return new Promise((ok,no)=>{let r=indexedDB.open(EH_DB,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(EH_STORE))r.result.createObjectStore(EH_STORE)};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
+async function ponerFotos(k,v){let d=await dbFotos();return new Promise((ok,no)=>{let t=d.transaction(EH_STORE,'readwrite');t.objectStore(EH_STORE).put(v,k);t.oncomplete=ok;t.onerror=()=>no(t.error)})}
+async function tomarFotos(k){let d=await dbFotos();return new Promise((ok,no)=>{let r=d.transaction(EH_STORE).objectStore(EH_STORE).get(k);r.onsuccess=()=>ok(Array.isArray(r.result)?r.result:[]);r.onerror=()=>no(r.error)})}
+async function quitarFotos(k){let d=await dbFotos();return new Promise((ok,no)=>{let t=d.transaction(EH_STORE,'readwrite');t.objectStore(EH_STORE).delete(k);t.oncomplete=ok;t.onerror=()=>no(t.error)})}
+function claveFotos(){return 'p_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
+
+
+let fotosV9=[];
+
+function prepararFotosV9(){
+ const input=document.getElementById('fotosProductoV9');
+ const archivos=Array.from((input&&input.files)||[]).slice(0,4);
+ const estado=document.getElementById('estadoFotosV9');
+ const preview=document.getElementById('previewFotosV9');
+ fotosV9=[];
+ if(preview)preview.innerHTML='';
+ if(!archivos.length){
+   if(estado)estado.textContent='⚠ No hay archivos en el selector. Pulsa “Elegir archivos” y selecciona de 1 a 4 fotos.';
+   return;
+ }
+ let faltan=archivos.length, errores=0;
+ archivos.forEach((archivo,indice)=>{
+   const lector=new FileReader();
+   lector.onload=function(e){
+     fotosV9[indice]=e.target.result;
+     const img=document.createElement('img');
+     img.src=e.target.result;
+     img.style.cssText='width:100%;height:85px;object-fit:contain;background:#fff;border:2px solid #dbe7f1;border-radius:10px';
+     if(preview)preview.appendChild(img);
+     faltan--;
+     if(faltan===0 && estado)estado.textContent='✓ '+fotosV9.filter(Boolean).length+' foto(s) cargadas y listas para guardar.';
+   };
+   lector.onerror=function(){
+     errores++; faltan--;
+     if(estado)estado.textContent='⚠ No se pudo leer '+archivo.name+'.';
+   };
+   lector.readAsDataURL(archivo);
+ });
+}
+
+
+
+
+
+
+let pedidosNuevos=JSON.parse(localStorage.getItem('pedidosNuevos')||'[]');
+function guardarPedidos(){localStorage.setItem('pedidosNuevos',JSON.stringify(pedidosNuevos));actualizarContadorPedidos()}
+function actualizarContadorPedidos(){let n=pedidosNuevos.filter(p=>p.estado==='pendiente').length;['badgePedidosNav','badgePedidosMovil','badgePedidosTitulo'].forEach(id=>{let e=document.getElementById(id);if(e){e.textContent=n;e.style.display=n?'inline-flex':'none'}})}
+function abrirPedidosAdmin(){if(!esAdmin){destinoAdmin='pedidos';abrirAdmin('pedidos');return}show('pedidos')}
+function renderPedidos(){
+ if(!esAdmin)return abrirAdmin('pedidos');
+ let e=document.getElementById('listaPedidos');if(!e)return;
+ let a=pedidosNuevos.filter(p=>p.estado==='pendiente');
+ e.innerHTML=a.length?a.map(p=>`<div class="pedido-card"><b>Pedido #${p.id}</b> <span style="float:right;background:#fff3cd;padding:4px 8px;border-radius:20px">PENDIENTE</span>
+ <div class="pedido-grid" style="margin-top:12px"><div><b>Cliente:</b> ${p.clienteNombre}</div><div><b>Teléfono:</b> ${p.clienteTelefono}</div><div><b>Producto:</b> ${p.nombre}</div><div><b>Plan:</b> ${p.plan}</div><div><b>Total:</b> ${money(p.total)}</div><div><b>Inicial:</b> ${money(p.inicial)}</div><div><b>Cuota:</b> ${money(p.mensual)}</div><div><b>Pago:</b> ${p.formaPago==='transferencia'?'Transferencia':'Efectivo'}</div><div><b>Dirección:</b> ${p.clienteDireccion}</div><div><b>Fecha:</b> ${p.fecha}</div></div>
+ <div class="pedido-actions">${p.comprobante?`<button onclick="verComprobantePedido('${p.id}')" style="background:#2563eb;color:white">Ver comprobante</button>`:''}<button onclick="aceptarPedido('${p.id}')" style="background:#16803c;color:white">✓ Aceptar</button><button onclick="rechazarPedido('${p.id}')" style="background:#b42318;color:white">✕ Rechazar</button></div></div>`).join(''):'<div class="pedido-card"><b>No hay pedidos pendientes.</b></div>';
+ actualizarContadorPedidos()
+}
+function verComprobantePedido(id){if(!esAdmin)return abrirAdmin('pedidos');let p=pedidosNuevos.find(x=>x.id===id);if(p&&p.comprobante){let w=window.open();w.document.write(`<img src="${p.comprobante}" style="max-width:100%">`)}}
+function aceptarPedido(id){if(!esAdmin)return abrirAdmin('pedidos');let p=pedidosNuevos.find(x=>x.id===id);if(!p||!confirm('¿Aceptar este pedido y pasarlo al historial?'))return;p.estado='aceptado';historialVentas.unshift({...p});localStorage.setItem('historialVentas',JSON.stringify(historialVentas));guardarPedidos();renderPedidos();alert('Pedido aceptado y enviado al historial.')}
+function rechazarPedido(id){if(!esAdmin)return abrirAdmin('pedidos');let p=pedidosNuevos.find(x=>x.id===id);if(!p||!confirm('¿Rechazar este pedido? El producto volverá al stock.'))return;p.estado='rechazado';let i=Number(p.productoIndex);if(Number.isInteger(i)&&productos[i]){productos[i].cantidad=Number(productos[i].cantidad||0)+1;localStorage.setItem('productos',JSON.stringify(productos));render()}guardarPedidos();renderPedidos();alert('Pedido rechazado. El producto volvió al stock.')}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(actualizarContadorPedidos,0));
+
+
+const ADMIN_PIN='2580'; // PIN provisional local. Se puede cambiar luego.
+let esAdmin=sessionStorage.getItem('electrohogarAdmin')==='1';
+let destinoAdmin='admin';
+
+function aplicarModoAdmin(){
+ document.body.classList.toggle('modo-admin',esAdmin);
+}
+function abrirAdmin(destino='admin'){
+ destinoAdmin=destino;
+ if(esAdmin){
+   if(destino==='admin'){ nuevoArticulo(); }
+   else { show(destino); }
+   return;
+ }
+ const ids=['catalogo','admin','carrito','historial','pedidos','adminLogin'];
+ ids.forEach(id=>{
+   const el=document.getElementById(id);
+   if(el) el.classList.toggle('hide',id!=='adminLogin');
+ });
+ const caja=document.getElementById('adminLogin');
+ if(caja){
+   caja.classList.remove('hide');
+   caja.style.display='block';
+ }
+ setTimeout(()=>{
+   const pin=document.getElementById('adminPin');
+   if(pin){pin.value='';pin.focus();}
+ },50);
+}
+function validarAdmin(){
+ const pin=document.getElementById('adminPin')?.value||'';
+ if(pin!==ADMIN_PIN){alert('PIN incorrecto.');return}
+ esAdmin=true;
+ sessionStorage.setItem('electrohogarAdmin','1');
+ document.getElementById('adminPin').value='';
+ aplicarModoAdmin();
+ if(destinoAdmin==='admin')nuevoArticulo(); else show(destinoAdmin);
+}
+function cerrarSesionAdmin(){
+ esAdmin=false;
+ sessionStorage.removeItem('electrohogarAdmin');
+ aplicarModoAdmin();
+ show('catalogo');
+ alert('Sesión de administrador cerrada.');
+}
+document.addEventListener('DOMContentLoaded',aplicarModoAdmin);
+
+
+let categoriaCatalogo='Todos';
+function categoriaDeProducto(p){
+ const n=String((p&&p.nombre)||'').toLowerCase();
+ if(/nevera|refrigerador|freezer|congelador/.test(n))return 'Neveras';
+ if(/lavadora|secadora/.test(n))return 'Lavadoras';
+ if(/aire|acondicionado|split/.test(n))return 'Aires';
+ if(/estufa|horno|cocina/.test(n))return 'Estufas';
+ return 'Otros';
+}
+function seleccionarCategoria(cat,btn){
+ categoriaCatalogo=cat;
+ document.querySelectorAll('.categorias button').forEach(b=>b.classList.remove('cat-activa'));
+ if(btn)btn.classList.add('cat-activa');
+ filtrarCatalogo();
+}
+function filtrarCatalogo(){
+ const q=String(document.getElementById('buscarProducto')?.value||'').trim().toLowerCase();
+ document.querySelectorAll('#productos .card').forEach((card,i)=>{
+   const p=productos[i];
+   if(!p)return;
+   const coincideTexto=!q||String(p.nombre||'').toLowerCase().includes(q);
+   const coincideCat=categoriaCatalogo==='Todos'||categoriaDeProducto(p)===categoriaCatalogo;
+   card.style.display=(coincideTexto&&coincideCat)?'':'none';
+ });
+}
+
+
+function abrirVisor(src){
+ document.getElementById('visorImagenGrande').src=src;
+ document.getElementById('visorImagen').classList.add('activo');
+}
+function cerrarVisor(e,forzar){
+ if(forzar || e.target.id==='visorImagen'){
+   document.getElementById('visorImagen').classList.remove('activo');
+   document.getElementById('visorImagenGrande').src='';
+ }
+}
+
+let productos=JSON.parse(localStorage.getItem('productos')||'null')||[
+ {nombre:'Nevera',img:'',contado:35000,p12:42000,p18:46800,p24:50400},
+ {nombre:'Lavadora',img:'',contado:28000,p12:33600,p18:37800,p24:40800}
+];
+let carrito=[];
+let historialVentas=JSON.parse(localStorage.getItem('historialVentas')||'[]');
+let productoEditando=-1;
+function money(v){return 'RD$ '+Number(v||0).toLocaleString()}
+function show(id){
+ if(id==='historial'&&!esAdmin){abrirAdmin('historial');return}
+ if(id==='admin'&&!esAdmin){abrirAdmin('admin');return}
+ ['catalogo','admin','carrito','historial','pedidos','adminLogin'].forEach(x=>{
+   const el=document.getElementById(x); if(el)el.classList.toggle('hide',x!==id);
+ });
+ if(id==='carrito')renderCart();
+ if(id==='historial')renderHistorial(document.getElementById('buscarVenta')?.value||'');
+ if(id==='pedidos')renderPedidos();
+}
+async function render(){
+ const box=document.getElementById('productos');if(!box)return;
+ box.innerHTML='';
+ for(let i=0;i<productos.length;i++){
+  let p=productos[i],f=[];
+  try{f=p.fotoKey?await tomarFotos(p.fotoKey):((p.imgs&&p.imgs.length)?p.imgs.slice(0,4):(p.img?[p.img]:[]))}catch(e){}
+  let gal=f.length?`<div class="product-gallery">${f.map(x=>`<img src="${x}" onclick="abrirVisor(this.src)">`).join('')}</div>`:`<div style="height:120px;display:grid;place-items:center;background:#f1f5f9;border-radius:12px">Sin foto</div>`;
+  box.insertAdjacentHTML('beforeend',`<div class="card">${gal}<h3>${p.nombre||'Artículo'}</h3><div><b>Precio:</b> ${money(p.contado)}</div><div><b>Disponibles:</b> ${Number(p.cantidad||0)}</div><select id="plan${i}" onchange="actualizarPlanCatalogo(${i})"><option value="contado">Contado</option><option value="p12">12 meses</option><option value="p18">18 meses</option><option value="p24">24 meses</option></select><div id="detallePlan${i}" style="background:#eaf4ff;color:#10436e;border-radius:8px;padding:8px;margin:7px 0;font-size:13px;font-weight:700">Pago al contado: ${money(p.contado)}</div><div style="display:grid;grid-template-columns:minmax(0,1.55fr) minmax(58px,.7fr) minmax(65px,.78fr);gap:5px;align-items:center;width:100%"><button onclick="add(${i})" style="width:100%;min-width:0;padding:9px 5px;font-size:12px;white-space:nowrap">Agregar al carrito</button><button class="solo-admin" onclick="editarArticulo(${i})" style="display:block!important;background:#64748b!important;color:#fff!important;width:100%;min-width:0;padding:9px 5px;font-size:12px;white-space:nowrap">Editar</button><button class="solo-admin" onclick="eliminarProducto(${i})" style="display:block!important;background:#dc2626!important;color:#fff!important;width:100%;min-width:0;padding:9px 5px;font-size:12px;white-space:nowrap">Eliminar</button></div></div>`);
+ }
+ filtrarCatalogo();
+}
+
+function actualizarPlanCatalogo(i){
+ const p=productos[i],selector=document.getElementById('plan'+i),detalle=document.getElementById('detallePlan'+i);
+ if(!p||!selector||!detalle)return;
+ const m=selector.value==='p12'?12:selector.value==='p18'?18:selector.value==='p24'?24:0;
+ if(!m){detalle.textContent='Pago al contado: '+money(p.contado);return}
+ const inicial=Number(p['inicial'+m]??p.inicial??0);
+ const cuota=Math.round(Math.max(0,Number(p.contado||0)-inicial)/m*100)/100;
+ detalle.textContent=m+' meses · Inicial: '+money(inicial)+' · Cuota aproximada: '+money(cuota)+'/mes';
+}
+
+let productoEditandoImagen=-1;
+function editarImagen(i){
+ productoEditandoImagen=i;
+ let input=document.getElementById('editarImagenCatalogo');
+ input.value='';
+ input.click();
+}
+function guardarImagenCatalogo(input){
+ let f=input.files&&input.files[0];if(!f||productoEditandoImagen<0)return;
+ let r=new FileReader();r.onload=async()=>{let p=productos[productoEditandoImagen],key=p.fotoKey||claveFotos(),a=[];try{a=p.fotoKey?await tomarFotos(key):((p.imgs&&p.imgs.length)?p.imgs.slice(0,4):(p.img?[p.img]:[]));if(a.length)a[0]=r.result;else a=[r.result];await ponerFotos(key,a.slice(0,4));p.fotoKey=key;delete p.img;delete p.imgs;localStorage.setItem('productos',JSON.stringify(productos));productoEditandoImagen=-1;await render();alert('Foto actualizada.')}catch(e){alert('No se pudo guardar la foto.')}};r.readAsDataURL(f);
+}
+
+async function eliminarProducto(i){
+ if(!esAdmin){abrirAdmin('admin');return}
+ const p=productos[i];if(!p)return;
+ if(!confirm('¿Seguro que deseas eliminar '+p.nombre+' del catálogo?'))return;
+ const lista=document.getElementById('productos');
+ const tarjetas=lista?Array.from(lista.children).filter(el=>el.classList.contains('card')):[];
+ // Mantener visible el artículo siguiente; si era el último, el anterior.
+ const siguiente=tarjetas[i+1]||tarjetas[i-1]||null;
+ const anteriorTop=siguiente?siguiente.getBoundingClientRect().top:null;
+ const scrollAnterior=window.scrollY;
+ if(p.fotoKey)try{await quitarFotos(p.fotoKey)}catch(e){}
+ productos.splice(i,1);
+ localStorage.setItem('productos',JSON.stringify(productos));
+ await render();
+ const nuevas=lista?Array.from(lista.children).filter(el=>el.classList.contains('card')):[];
+ const indiceDestino=i<nuevas.length?i:nuevas.length-1;
+ const destino=indiceDestino>=0?nuevas[indiceDestino]:null;
+ // Compensar el cambio de altura sin regresar al principio de la página.
+ if(destino&&anteriorTop!==null){
+   const diferencia=destino.getBoundingClientRect().top-anteriorTop;
+   window.scrollTo({top:Math.max(0,window.scrollY+diferencia),behavior:'instant'});
+ }else{
+   window.scrollTo({top:scrollAnterior,behavior:'instant'});
+ }
+}
+
+function sincronizarInicialGeneral(){
+ const campo=document.getElementById('inicialGeneral');if(!campo)return;
+ ['inicial12','inicial18','inicial24'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=campo.value});
+}
+function limpiarFormularioArticulo(){
+ const n=document.getElementById('nombre');if(n)n.value='';
+ const c=document.getElementById('cantidad');if(c)c.value='1';
+ const p=document.getElementById('contado');if(p)p.value='';
+ const costo=document.getElementById('costo');if(costo)costo.value='';calcularGanancia();
+ ['inicial12','inicial18','inicial24'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
+ const ig=document.getElementById('inicialGeneral');if(ig)ig.value='';
+ fotosV9=[];
+ const inp=document.getElementById('fotosProductoV9');if(inp)inp.value='';
+ const prev=document.getElementById('previewFotosV9');if(prev)prev.innerHTML='';
+ const est=document.getElementById('estadoFotosV9');if(est)est.textContent='';
+}
+function nuevoArticulo(){
+ if(!esAdmin){abrirAdmin('admin');return;}
+
+ productoEditando=-1;
+ limpiarFormularioArticulo();
+ let t=document.getElementById('tituloAdmin');
+ if(t)t.textContent='Agregar artículo';
+ show('admin');
+}
+
+setTimeout(()=>{if(document.getElementById('buscarProducto'))filtrarCatalogo()},0);
+
+function editarArticulo(i){
+ if(!esAdmin){abrirAdmin('admin');return;}
+ productoEditando=Number(i);
+ const p=productos[productoEditando];if(!p)return;
+ const t=document.getElementById('tituloAdmin');if(t)t.textContent='Editar artículo';
+ document.getElementById('nombre').value=p.nombre||'';
+ document.getElementById('cantidad').value=Number(p.cantidad??0);
+ document.getElementById('contado').value=Number(p.contado||0);
+ document.getElementById('costo').value=p.costo==null?'':Number(p.costo);calcularGanancia();
+ [12,18,24].forEach(m=>{document.getElementById('inicial'+m).value=Number(p['inicial'+m]??p.inicial??0)});
+ const ig=document.getElementById('inicialGeneral');if(ig)ig.value=Number(p.inicial??p.inicial12??0);
+ fotosV9=[];
+ const prev=document.getElementById('previewFotosV9');if(prev)prev.innerHTML='';
+ const est=document.getElementById('estadoFotosV9');if(est)est.textContent='Si no eliges fotos nuevas, se conservarán las actuales.';
+ show('admin');
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function add(i){
+ let k=document.getElementById('plan'+i).value,p=productos[i];
+ let disponible=Number(p.cantidad||0);
+ if(disponible<=0){alert('Este artículo está agotado.');return}
+ let meses=k==='p12'?12:k==='p18'?18:k==='p24'?24:0;
+ let total=Number(p.contado||0);
+ let ini=meses?Number(p['inicial'+meses]??p.inicial??0):0;
+ let saldo=meses?Math.max(0,total-ini):total;
+ let mensual=meses?Math.round(saldo/meses):0;
+
+ // Reservar/descontar una unidad inmediatamente al agregarla a la venta.
+ p.cantidad=disponible-1;
+ localStorage.setItem('productos',JSON.stringify(productos));
+
+ carrito.push({productoIndex:i,nombre:p.nombre,costoUnitario:p.costo??null,plan:k,total:total,inicial:ini,saldo:saldo,mensual:mensual,comprobante:'',pagado:false,reservado:true,formaPago:'efectivo',clienteNombre:'',clienteTelefono:'',clienteDireccion:'',clienteCedula:''});
+ document.getElementById('ncart').textContent=carrito.length;
+ render();
+ show('carrito')
+}
+
+function renderCart(){
+ document.getElementById('items').innerHTML=carrito.length?carrito.map((x,i)=>{
+   let meses=x.plan==='p12'?12:x.plan==='p18'?18:x.plan==='p24'?24:0;
+   let total=Number(x.total||0);
+   let ini=meses?Number(x.inicial||0):0;
+   let saldo=meses?Math.max(0,total-ini):total;
+   let cuota=meses?Math.round(saldo/meses):0;
+   if(x.finalizado){
+     return `<div class="card">
+       <div style="text-align:center;padding:18px 8px">
+         <div style="font-size:24px;font-weight:bold;color:#16a34a;margin-bottom:8px">✓ Solicitud preparada</div>
+         <div style="font-size:16px;margin-bottom:8px"><b>${x.nombre}</b></div>
+         <div>Cliente: ${x.clienteNombre||''}</div>
+         <div>Teléfono: ${x.clienteTelefono||''}</div>
+         <div>Forma de pago: ${x.formaPago==='transferencia'?'Transferencia bancaria':'Efectivo'}</div>
+         <div style="margin-top:8px">Total: ${money(total)}</div>
+         ${meses?`<div>Inicial: ${money(ini)}</div><div>Saldo: ${money(saldo)}</div><div>Cuota mensual: ${money(cuota)}</div>`:''}
+         <button onclick="cerrarCompra(${i})" style="margin-top:14px;background:#16a34a">Terminar compra</button>
+       </div>
+     </div>`;
+   }
+   return `<div class="card">
+   <b>${x.nombre}</b><br>
+   Plan: ${meses?meses+' meses':'Contado'}<br>
+   Total: ${money(total)}
+   ${meses?`<br>Inicial: ${money(ini)}<br>Saldo después del inicial: ${money(saldo)}<br>Cuota mensual: ${money(cuota)}`:''}
+   <hr>
+   <div style="background:#f8fafc;border:1px solid #dbe3ee;border-radius:10px;padding:10px;margin-bottom:12px">
+     <b>Datos del cliente</b><div style="font-size:13px;color:#475569;margin:4px 0 7px">Completa tus datos para confirmar el pedido.</div>
+     <input type="text" placeholder="Nombre y apellido" value="${x.clienteNombre||''}" oninput="guardarDatoCliente(${i},'clienteNombre',this.value)">
+     <input type="tel" placeholder="Teléfono" value="${x.clienteTelefono||''}" oninput="guardarDatoCliente(${i},'clienteTelefono',this.value)">
+     <input type="text" placeholder="Dirección" value="${x.clienteDireccion||''}" oninput="guardarDatoCliente(${i},'clienteDireccion',this.value)">
+     <input type="text" placeholder="Cédula (opcional)" value="${x.clienteCedula||''}" oninput="guardarDatoCliente(${i},'clienteCedula',this.value)">
+   </div>
+   <label><b>Forma de pago</b></label>
+   <select onchange="cambiarFormaPago(${i},this.value)">
+     <option value="efectivo" ${x.formaPago==='efectivo'?'selected':''}>Efectivo</option>
+     <option value="transferencia" ${x.formaPago==='transferencia'?'selected':''}>Transferencia bancaria</option>
+   </select>
+   ${x.formaPago==='transferencia'?`<label><b>Subir comprobante de pago</b></label>
+   <input type="file" accept="image/*" onchange="subirComprobante(${i},this)">
+   <div id="preview${i}">${x.comprobante?`<img src="${x.comprobante}" style="max-width:100%;max-height:220px;object-fit:contain;border-radius:10px;margin:8px 0">`:''}</div>`:''}
+   <button onclick="volverAPlanes(${i})" style="background:#64748b">Volver</button>
+   <button onclick="confirmarPedido(${i})" ${x.pagado?'disabled':''}>${x.pagado?'Pedido confirmado':'Confirmar pedido'}</button>
+   <button onclick="eliminarCarrito(${i})" style="background:#dc2626;margin-left:6px">Eliminar del carrito</button>
+   </div>`;
+ }).join('<br>'):'El carrito está vacío.'
+}
+
+function guardarDatoCliente(i,campo,valor){
+ if(carrito[i])carrito[i][campo]=valor;
+}
+
+function cambiarFormaPago(i,forma){
+ carrito[i].formaPago=forma;
+ 
+ renderCart();
+}
+function volverAPlanes(i){
+ let x=carrito[i];
+ if(x && x.reservado && !x.pagado){
+   let idx=Number.isInteger(x.productoIndex)?x.productoIndex:productos.findIndex(p=>p.nombre===x.nombre);
+   if(idx>=0){
+     productos[idx].cantidad=Number(productos[idx].cantidad||0)+1;
+     localStorage.setItem('productos',JSON.stringify(productos));
+     render();
+   }
+ }
+ carrito.splice(i,1);
+ document.getElementById('ncart').textContent=carrito.length;
+ show('catalogo');
+}
+
+function subirComprobante(i,input){
+ let f=input.files&&input.files[0];
+ if(!f)return;
+ let r=new FileReader();
+ r.onload=()=>{carrito[i].comprobante=r.result;renderCart()};
+ r.readAsDataURL(f)
+}
+function confirmarPedido(i){
+ let x=carrito[i];
+ if(!x)return;
+ if(!String(x.clienteNombre||'').trim()){alert('Escribe tu nombre y apellido.');return}
+ if(!String(x.clienteTelefono||'').trim()){alert('Escribe tu teléfono.');return}
+ if(!String(x.clienteDireccion||'').trim()){alert('Escribe tu dirección.');return}
+ if(x.formaPago==='transferencia'&&!x.comprobante){
+   alert('Primero debes subir el comprobante de la transferencia para finalizar la compra.');
+   return;
+ }
+ if(x.pagado)return;
+ x.pagado=true;
+ x.finalizado=true;
+ renderCart();
+}
+
+function cerrarCompra(i){
+ let x=carrito[i]; if(!x)return;
+ let meses=x.plan==='p12'?12:x.plan==='p18'?18:x.plan==='p24'?24:0;
+ let total=Number(x.total||0),ini=meses?Number(x.inicial||0):0;
+ let saldo=meses?Math.max(0,total-ini):total,cuota=meses?Math.round(saldo/meses):0;
+ let pedido={id:'P'+Date.now(),fecha:new Date().toLocaleString('es-DO'),nombre:x.nombre,productoIndex:x.productoIndex,
+ plan:meses?meses+' meses':'Contado',total,inicial:ini,saldo,mensual:cuota,meses,saldoPendiente:saldo,pagos:[],
+ estadoCredito:meses?(saldo>0?'Crédito activo':'Crédito pagado'):'Pagado',formaPago:x.formaPago,comprobante:x.comprobante||'',
+ costoUnitario:x.costoUnitario??null,clienteNombre:x.clienteNombre||'',clienteTelefono:x.clienteTelefono||'',clienteDireccion:x.clienteDireccion||'',clienteCedula:x.clienteCedula||'',estado:'pendiente'};
+ pedidosNuevos.unshift(pedido);guardarPedidos();
+ carrito.splice(i,1);document.getElementById('ncart').textContent=carrito.length;
+ render();show('catalogo');
+ alert('Pedido enviado correctamente. Queda pendiente de confirmación del administrador.');
+}
+
+function eliminarCarrito(i){
+ let x=carrito[i];
+ if(x && x.reservado && !x.pagado){
+   let idx=Number.isInteger(x.productoIndex)?x.productoIndex:productos.findIndex(p=>p.nombre===x.nombre);
+   if(idx>=0){
+     productos[idx].cantidad=Number(productos[idx].cantidad||0)+1;
+     localStorage.setItem('productos',JSON.stringify(productos));
+     render();
+   }
+ }
+ carrito.splice(i,1);
+ document.getElementById('ncart').textContent=carrito.length;
+ renderCart()
+}
+function renderHistorial(filtro=''){
+ const q=String(filtro||'').trim().toLowerCase();
+ const ventas=historialVentas.filter(v=>!q||[v.clienteNombre,v.clienteTelefono,v.nombre,v.id].some(a=>String(a||'').toLowerCase().includes(q)));
+ const e=document.getElementById('listaHistorial');
+ if(!e)return;
+ e.innerHTML=ventas.length?ventas.map(v=>`<div class="card" style="margin-bottom:12px">
+   <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+     <b>${v.nombre}</b><span class="badge">${v.fecha||''}</span>
+   </div>
+   <div><b>Cliente:</b> ${v.clienteNombre||''}</div>
+   <div><b>Teléfono:</b> ${v.clienteTelefono||''}</div>
+   <div><b>Dirección:</b> ${v.clienteDireccion||''}</div>
+   ${v.clienteCedula?`<div><b>Cédula:</b> ${v.clienteCedula}</div>`:''}
+   <div><b>Plan:</b> ${v.plan||''}</div>
+   <div><b>Forma de pago:</b> ${v.formaPago==='transferencia'?'Transferencia bancaria':'Efectivo'}</div>
+   <div><b>Total:</b> ${money(v.total)}</div>
+   ${esAdmin&&v.costoUnitario!=null?`<div style="background:#e8f4ff;padding:9px;border-radius:9px;margin-top:8px"><b>Solo administrador · Costo:</b> ${money(v.costoUnitario)}<br><b>Ganancia estimada:</b> ${money(Number(v.total||0)-Number(v.costoUnitario))}<br><b>Porcentaje sobre costo:</b> ${Number(v.costoUnitario)>0?(((Number(v.total||0)-Number(v.costoUnitario))/Number(v.costoUnitario))*100).toFixed(1)+' %':'No calculable'}</div>`:''}
+   ${String(v.plan).includes('meses')?`<div><b>Inicial:</b> ${money(v.inicial)}</div>
+   <div><b>Saldo pendiente:</b> ${money(v.saldoPendiente ?? v.saldo)}</div>
+   <div><b>Cuota mensual:</b> ${money(v.mensual)}</div>
+   <div><b>Cuotas registradas:</b> ${(v.pagos||[]).length}${v.meses?' de '+v.meses:''}</div>
+   <div><b>Estado:</b> ${(v.saldoPendiente ?? v.saldo)>0?'🟠 Crédito activo':'✓ Crédito pagado'}</div>
+   ${(v.saldoPendiente ?? v.saldo)>0?`<button class="solo-admin" onclick="registrarCuota('${v.id}')" style="background:#2563eb;margin-top:8px">Registrar cuota</button>`:''}
+   ${(v.pagos||[]).length?`<button class="solo-admin" onclick="verPagos('${v.id}')" style="background:#7c3aed;margin-top:8px">Ver pagos</button>`:''}`:''}
+   <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px">
+     ${v.comprobante?`<button class="solo-admin" onclick="verComprobante('${v.id}')" style="background:#64748b">Ver comprobante</button>`:''}
+     <button onclick="imprimirRecibo('${v.id}')" style="background:#16a34a">Imprimir / Guardar recibo</button>
+    ${esAdmin?`<button class="solo-admin" onclick="eliminarCompraHistorial('${v.id}',this)" title="Eliminar esta compra" style="background:#dc2626;padding:7px 11px;font-size:12px;border-radius:8px">Eliminar</button>`:''}
+   </div>
+ </div>`).join(''):'No hay ventas guardadas.';
+}
+
+function eliminarCompraHistorial(id,boton){
+ if(!esAdmin){abrirAdmin('historial');return;}
+ const i=historialVentas.findIndex(v=>String(v.id)===String(id));
+ if(i<0)return;
+ const v=historialVentas[i];
+ const pagos=(v.pagos||[]).length;
+ const aviso='¿Eliminar definitivamente esta compra del historial?\n\nCliente: '+(v.clienteNombre||'Sin nombre')+'\nArtículo: '+(v.nombre||'')+'\nTotal: '+money(v.total)+(pagos?'\nTiene '+pagos+' pago(s) registrado(s), que también se eliminarán.':'')+'\n\nEsta acción no se puede deshacer y NO modifica el inventario.';
+ if(!confirm(aviso))return;
+ const respaldo=historialVentas.slice();
+ historialVentas.splice(i,1);
+ try{localStorage.setItem('historialVentas',JSON.stringify(historialVentas));}
+ catch(err){historialVentas=respaldo;alert('No se pudo guardar la eliminación.');return;}
+ // Mantener la posición de la lista: no regresar al inicio.
+ const tarjeta=boton&&boton.closest('.card');
+ const anterior=tarjeta&&tarjeta.previousElementSibling;
+ const siguiente=tarjeta&&tarjeta.nextElementSibling;
+ const referencia=siguiente||anterior;
+ const posicion=referencia?referencia.getBoundingClientRect().top:0;
+ renderHistorial(document.getElementById('buscarVenta')?.value||'');
+ const tarjetas=document.querySelectorAll('#listaHistorial .card');
+ const indiceVisible=Math.min(i,tarjetas.length-1);
+ const destino=tarjetas[indiceVisible]||tarjetas[tarjetas.length-1];
+ if(destino&&referencia){window.scrollBy(0,destino.getBoundingClientRect().top-posicion);}
+}
+
+function normalizarCredito(v){
+ if(!Array.isArray(v.pagos))v.pagos=[];
+ if(v.saldoPendiente===undefined||v.saldoPendiente===null)v.saldoPendiente=Number(v.saldo||0);
+ if(!v.meses){
+   let m=String(v.plan||'').match(/\d+/);
+   v.meses=m?Number(m[0]):0;
+ }
+}
+
+function registrarCuota(id){
+ if(!esAdmin){abrirAdmin('admin');return;}
+
+ const v=historialVentas.find(x=>x.id===id);
+ if(!v)return;
+ normalizarCredito(v);
+ if(v.saldoPendiente<=0){alert('Este crédito ya está pagado.');return}
+ const sugerido=Math.min(Number(v.mensual||0),Number(v.saldoPendiente||0));
+ const entrada=prompt('Monto recibido de esta cuota:',Math.round(sugerido));
+ if(entrada===null)return;
+ const monto=Number(String(entrada).replace(/,/g,'').trim());
+ if(!monto||monto<=0){alert('Escribe un monto válido.');return}
+ if(monto>v.saldoPendiente){alert('El pago no puede ser mayor que el saldo pendiente.');return}
+ const saldoAnterior=Number(v.saldoPendiente);
+ v.saldoPendiente=Math.max(0,saldoAnterior-monto);
+ const pago={
+   numero:v.pagos.length+1,
+   fecha:new Date().toLocaleString('es-DO'),
+   monto:monto,
+   saldoAnterior:saldoAnterior,
+   saldoNuevo:v.saldoPendiente
+ };
+ v.pagos.push(pago);
+ v.estadoCredito=v.saldoPendiente<=0?'Crédito pagado':'Crédito activo';
+ localStorage.setItem('historialVentas',JSON.stringify(historialVentas));
+ renderHistorial(document.getElementById('buscarVenta')?.value||'');
+ if(confirm('Pago registrado correctamente.\\nSaldo pendiente: '+money(v.saldoPendiente)+'\\n\\n¿Deseas imprimir o guardar el recibo de esta cuota?')){
+   imprimirReciboCuota(id,pago.numero);
+ }
+}
+
+function eliminarCuota(id,indice){
+ if(!esAdmin){alert('Solo el administrador puede eliminar cuotas.');return null;}
+ const v=historialVentas.find(x=>x.id===id);
+ if(!v)return null;
+ normalizarCredito(v);
+ if(!Number.isInteger(indice)||indice<0||indice>=v.pagos.length)return null;
+ const p=v.pagos[indice];
+ if(!confirm('¿Eliminar el pago #'+p.numero+' de '+money(p.monto)+'?\n\nEl monto volverá al saldo pendiente y se recalcularán las cuotas posteriores.'))return null;
+ // Recalcular el saldo a partir del saldo original, conservando los demás pagos.
+ const original=Number(v.saldo||0);
+ const nuevos=v.pagos.filter((_,i)=>i!==indice);
+ let saldo=original;
+ for(let i=0;i<nuevos.length;i++){
+   const pago=nuevos[i];
+   pago.numero=i+1;
+   pago.saldoAnterior=saldo;
+   saldo=Math.max(0,saldo-Number(pago.monto||0));
+   pago.saldoNuevo=saldo;
+ }
+ v.pagos=nuevos;
+ v.saldoPendiente=saldo;
+ v.estadoCredito=saldo<=0?'Crédito pagado':'Crédito activo';
+ try{localStorage.setItem('historialVentas',JSON.stringify(historialVentas));}
+ catch(e){alert('No se pudo guardar la eliminación.');return null;}
+ renderHistorial(document.getElementById('buscarVenta')?.value||'');
+ return {pagos:v.pagos.map(x=>({...x})),saldoPendiente:saldo};
+}
+
+function verPagos(id){
+ if(!esAdmin){abrirAdmin('admin');return;}
+ const v=historialVentas.find(x=>x.id===id);
+ if(!v)return;
+ normalizarCredito(v);
+ if(!v.pagos.length){alert('Todavía no hay cuotas registradas.');return}
+ const w=window.open('','_blank');
+ if(!w){alert('Permite las ventanas emergentes para ver los pagos.');return}
+ const escapar=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const datos=v.pagos.map(p=>({numero:p.numero,fecha:p.fecha,monto:p.monto,saldoAnterior:p.saldoAnterior,saldoNuevo:p.saldoNuevo}));
+ const cliente=escapar(v.clienteNombre), articulo=escapar(v.nombre), factura=escapar(v.id), telefono=escapar(v.clienteTelefono);
+ w.document.write(`<html><head><meta charset="UTF-8"><title>Historial de cuotas</title><style>
+ body{font-family:Arial,sans-serif;max-width:760px;margin:25px auto;padding:18px;color:#172033}
+ .p{border:1px solid #ddd;border-radius:10px;padding:12px;margin:10px 0}
+ button{padding:9px 12px;cursor:pointer}.eliminar{background:#dc2626;color:white;border:0;border-radius:5px;margin-left:6px}#reciboImpresion{display:none}
+ @media print{.historial{display:none!important}#reciboImpresion{display:block!important}body{max-width:650px;margin:0 auto;padding:12px}button{display:none!important}}
+ </style></head><body>
+ <div class="historial"><h2>Historial de cuotas</h2><p><b>Cliente:</b> ${cliente}</p><p><b>Artículo:</b> ${articulo}</p>
+ <p><b>Saldo pendiente:</b> <span id="saldoPendiente">${money(v.saldoPendiente)}</span></p>
+ <div id="listaCuotas"></div></div>
+ <div id="reciboImpresion"></div>
+ <script>
+ let pagos=${JSON.stringify(datos).replace(/</g,'\u003c')};
+ const ventaId=${JSON.stringify(id).replace(/</g,'\u003c')};
+ function dinero(n){return 'RD$ '+Number(n||0).toLocaleString('es-DO')}
+ function escaparHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ function dibujarPagos(){
+  document.getElementById('listaCuotas').innerHTML=pagos.length?pagos.map((p,i)=>
+   '<div class="p"><b>Cuota / pago #'+p.numero+'</b><br>Fecha: '+escaparHtml(p.fecha)+'<br>Pagado: '+dinero(p.monto)+'<br>Saldo anterior: '+dinero(p.saldoAnterior)+'<br>Nuevo saldo: '+dinero(p.saldoNuevo)+'<br><button onclick="imprimirCuota('+i+')">Imprimir recibo</button> <button class="eliminar" onclick="borrarCuota('+i+')">Eliminar</button></div>'
+  ).join(''):'No quedan cuotas registradas.';
+ }
+ function borrarCuota(i){
+  if(!window.opener||window.opener.closed||typeof window.opener.eliminarCuota!=='function'){
+   alert('Abre el historial de cuotas desde la aplicación para poder eliminar.');return;
+  }
+  const resultado=window.opener.eliminarCuota(ventaId,i);
+  if(!resultado)return;
+  pagos=resultado.pagos;
+  document.getElementById('saldoPendiente').textContent=dinero(resultado.saldoPendiente);
+  document.getElementById('reciboImpresion').innerHTML='';
+  dibujarPagos();
+ }
+ function imprimirCuota(i){
+   const p=pagos[i];if(!p)return;
+   document.getElementById('reciboImpresion').innerHTML=\`<h1 style="text-align:center">ElectroHogar</h1><h2>Recibo de cuota</h2>
+   <p><b>Factura:</b> ${factura}</p><p><b>Fecha:</b> \${escaparHtml(p.fecha)}</p><hr>
+   <p><b>Cliente:</b> ${cliente}</p><p><b>Teléfono:</b> ${telefono}</p><p><b>Artículo:</b> ${articulo}</p>
+   <p><b>Pago #:</b> \${p.numero}</p><p><b>Monto recibido:</b> \${dinero(p.monto)}</p>
+   <p><b>Saldo anterior:</b> \${dinero(p.saldoAnterior)}</p><p><b>Saldo pendiente:</b> \${dinero(p.saldoNuevo)}</p><hr>
+   <p style="text-align:center">\${Number(p.saldoNuevo)<=0?'CRÉDITO PAGADO':'Crédito activo'}</p>\`;
+   window.focus();window.print();
+ }
+ dibujarPagos();
+ <\/script></body></html>`);
+ w.document.close();
+}
+
+function imprimirReciboCuota(id,numero){
+ const v=historialVentas.find(x=>x.id===id);
+ if(!v)return;
+ normalizarCredito(v);
+ const p=v.pagos.find(x=>x.numero===numero);
+ if(!p)return;
+ const w=window.open('','_blank');
+ if(!w){alert('Permite las ventanas emergentes para imprimir o guardar el recibo.');return}
+ w.document.write(`<html><head><title>Recibo cuota ${p.numero}</title><style>body{font-family:Arial;max-width:620px;margin:30px auto;padding:20px;color:#172033}.line{border-top:1px solid #ccc;margin:15px 0}.row{margin:8px 0}@media print{button{display:none}}</style></head><body>
+ <h1 style="text-align:center">ElectroHogar</h1><h2>Recibo de cuota</h2>
+ <div class="row"><b>Factura:</b> ${v.id}</div><div class="row"><b>Fecha:</b> ${p.fecha}</div>
+ <div class="line"></div><div class="row"><b>Cliente:</b> ${v.clienteNombre||''}</div><div class="row"><b>Teléfono:</b> ${v.clienteTelefono||''}</div>
+ <div class="row"><b>Artículo:</b> ${v.nombre||''}</div><div class="row"><b>Pago #:</b> ${p.numero}</div>
+ <div class="row"><b>Monto recibido:</b> ${money(p.monto)}</div><div class="row"><b>Saldo anterior:</b> ${money(p.saldoAnterior)}</div>
+ <div class="row"><b>Saldo pendiente:</b> ${money(p.saldoNuevo)}</div>
+ <div class="line"></div><p style="text-align:center">${p.saldoNuevo<=0?'✓ CRÉDITO PAGADO':'Crédito activo'}</p>
+ <button onclick="window.print()" style="display:block;margin:20px auto;padding:12px 20px">Imprimir / Guardar como PDF</button>
+ </body></html>`);
+ w.document.close();
+}
+
+function verComprobante(id){
+ if(!esAdmin){abrirAdmin('admin');return;}
+
+ const v=historialVentas.find(x=>x.id===id);
+ if(!v||!v.comprobante){alert('Esta venta no tiene comprobante.');return}
+ const w=window.open('','_blank');
+ if(!w){alert('Permite las ventanas emergentes para ver el comprobante.');return}
+ w.document.write(`<title>Comprobante ${v.id}</title><body style="font-family:Arial;text-align:center;padding:20px"><h2>Comprobante de pago</h2><p>${v.clienteNombre||''} — ${v.nombre||''}</p><img src="${v.comprobante}" style="max-width:95%;max-height:80vh;object-fit:contain"></body>`);
+ w.document.close();
+}
+
+function imprimirRecibo(id){
+ const v=historialVentas.find(x=>x.id===id);
+ if(!v)return;
+ const w=window.open('','_blank');
+ if(!w){alert('Permite las ventanas emergentes para imprimir o guardar el recibo.');return}
+ w.document.write(`<html><head><title>Recibo ${v.id}</title><style>body{font-family:Arial;max-width:650px;margin:30px auto;padding:20px;color:#172033}h1{text-align:center}.line{border-top:1px solid #ccc;margin:15px 0}.row{margin:7px 0}@media print{button{display:none}}</style></head><body>
+ <h1>ElectroHogar</h1><h2>Recibo de compra</h2>
+ <div class="row"><b>No.:</b> ${v.id}</div><div class="row"><b>Fecha:</b> ${v.fecha||''}</div>
+ <div class="line"></div>
+ <div class="row"><b>Cliente:</b> ${v.clienteNombre||''}</div>
+ <div class="row"><b>Teléfono:</b> ${v.clienteTelefono||''}</div>
+ <div class="row"><b>Dirección:</b> ${v.clienteDireccion||''}</div>
+ ${v.clienteCedula?`<div class="row"><b>Cédula:</b> ${v.clienteCedula}</div>`:''}
+ <div class="line"></div>
+ <div class="row"><b>Artículo:</b> ${v.nombre||''}</div><div class="row"><b>Plan:</b> ${v.plan||''}</div>
+ <div class="row"><b>Forma de pago:</b> ${v.formaPago==='transferencia'?'Transferencia bancaria':'Efectivo'}</div>
+ <div class="row"><b>Total:</b> ${money(v.total)}</div>
+ ${String(v.plan).includes('meses')?`<div class="row"><b>Inicial:</b> ${money(v.inicial)}</div><div class="row"><b>Saldo pendiente:</b> ${money(v.saldoPendiente ?? v.saldo)}</div><div class="row"><b>Cuota mensual:</b> ${money(v.mensual)}</div><div class="row"><b>Pagos registrados:</b> ${(v.pagos||[]).length}</div>`:''}
+ <div class="line"></div><p style="text-align:center">Gracias por su compra.</p>
+ <button onclick="window.print()" style="display:block;margin:20px auto;padding:12px 20px">Imprimir / Guardar como PDF</button>
+ </body></html>`);
+ w.document.close();
+}
+
+function calcularGanancia(){
+ const el=document.getElementById('resumenGanancia');if(!el)return;
+ const c=document.getElementById('costo').value.trim(),v=document.getElementById('contado').value.trim();
+ if(c===''||v===''){el.textContent='Introduce costo y venta para calcular la ganancia.';return}
+ const costo=Number(c),venta=Number(v);if(!Number.isFinite(costo)||!Number.isFinite(venta)||costo<0||venta<0){el.textContent='Introduce precios válidos.';return}
+ const ganancia=venta-costo;
+ const porcentaje=costo>0?((ganancia/costo)*100).toFixed(1)+' %':'No calculable (costo cero)';
+ el.textContent='Ganancia estimada: '+money(ganancia)+' · Margen sobre costo: '+porcentaje;
+}
+
+async function guardar(){
+ const n=document.getElementById('nombre'),c=document.getElementById('cantidad'),pr=document.getElementById('contado');
+ const nombreArticulo=String(n.value||'').trim(), precio=Number(pr.value||0);
+ if(!nombreArticulo){alert('Escribe el nombre del artículo.');return}
+ if(!precio||precio<=0){alert('Escribe un precio de venta válido.');return}
+ const costoTexto=document.getElementById('costo').value.trim();
+ if(costoTexto!==''&&(!Number.isFinite(Number(costoTexto))||Number(costoTexto)<0)){alert('Escribe un precio de costo válido.');return}
+ const costo=costoTexto===''?null:Number(costoTexto);
+ const idx=Number(productoEditando), editando=Number.isInteger(idx)&&idx>=0&&idx<productos.length, viejo=editando?productos[idx]:null;
+ const nuevas=fotosV9.filter(Boolean).slice(0,4);
+ let key=(viejo&&viejo.fotoKey)||claveFotos();
+ try{
+   if(nuevas.length) await ponerFotos(key,nuevas);
+   else if(viejo&&!viejo.fotoKey){
+     let antiguas=(viejo.imgs&&viejo.imgs.length)?viejo.imgs.slice(0,4):(viejo.img?[viejo.img]:[]);
+     if(antiguas.length)await ponerFotos(key,antiguas);
+   }
+ }catch(e){alert('No se pudieron guardar las fotos.');return}
+ const iniciales={};
+ for(const m of [12,18,24]){
+  const campo=document.getElementById('inicial'+m);
+  const valor=campo.value.trim()===''?0:Number(campo.value);
+  if(!Number.isFinite(valor)||valor<0||valor>precio){alert('El inicial de '+m+' meses debe estar entre RD$ 0 y el precio de venta.');campo.focus();return}
+  iniciales['inicial'+m]=valor;
+ }
+ const articulo={nombre:nombreArticulo,fotoKey:key,cantidad:Math.max(0,parseInt(c.value||0)),costo:costo,contado:precio,...iniciales,inicial:iniciales.inicial12,p12:precio,p18:precio,p24:precio};
+ if(editando)productos[idx]=articulo;else productos.push(articulo);
+ try{localStorage.setItem('productos',JSON.stringify(productos))}
+ catch(e){alert('No se pudieron guardar los datos del artículo.');return}
+ productoEditando=-1;fotosV9=[];document.getElementById('fotosProductoV9').value='';
+ await render();show('catalogo');alert(editando?'Artículo actualizado correctamente.':'Artículo guardado correctamente.');
+}
+
+function actualizarApp(){if(!('serviceWorker' in navigator)){alert('Actualiza la página desde el navegador.');return;} navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).then(()=>alert('Actualización comprobada. Si publicaste una versión nueva, cierra y vuelve a abrir la aplicación.')).catch(()=>alert('No se pudo comprobar la actualización.'));}
+
+
+async function iniciarElectroHogar(){
+ let cambio=false;
+ for(let p of productos){
+  if(!p.fotoKey){
+   let a=(p.imgs&&p.imgs.length)?p.imgs.slice(0,4):(p.img?[p.img]:[]);
+   if(a.length){try{let k=claveFotos();await ponerFotos(k,a);p.fotoKey=k;delete p.img;delete p.imgs;cambio=true}catch(e){}}
+  }
+ }
+ if(cambio)try{localStorage.setItem('productos',JSON.stringify(productos))}catch(e){}
+ await render();
+}
+
+
+async function exportarRespaldoEH(){
+ if(!esAdmin){abrirAdmin('admin');return;}
+ try{
+  const fotos={}; const claves=new Set(productos.map(p=>p.fotoKey).filter(Boolean));
+  for(const clave of claves){fotos[clave]=await tomarFotos(clave)}
+  const datos={app:'ElectroHogar',versionRespaldo:1,fecha:new Date().toISOString(),productos,pedidosNuevos,historialVentas,fotos};
+  const blob=new Blob([JSON.stringify(datos)],{type:'application/json'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;
+  a.download='ElectroHogar_respaldo_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  alert('Copia descargada. Guárdala en un lugar seguro.');
+ }catch(err){console.error(err);alert('No se pudo crear el respaldo. Comprueba el espacio disponible.');}
+}
+async function importarRespaldoEH(input){
+ if(!esAdmin){input.value='';abrirAdmin('admin');return;}
+ const archivo=input.files&&input.files[0];input.value='';if(!archivo)return;
+ let d;try{d=JSON.parse(await archivo.text())}catch(e){alert('El archivo no es un JSON válido.');return}
+ if(!d||d.app!=='ElectroHogar'||d.versionRespaldo!==1||!Array.isArray(d.productos)||!Array.isArray(d.pedidosNuevos)||!Array.isArray(d.historialVentas)||!d.fotos||typeof d.fotos!=='object'||Array.isArray(d.fotos)){
+  alert('El archivo no es un respaldo compatible de ElectroHogar.');return;
+ }
+ if(!confirm('ATENCIÓN: se reemplazarán productos, pedidos, historial y fotos de este navegador. ¿Ya guardaste una copia de tus datos actuales?'))return;
+ try{
+  // Preflight storage before changing the application state.
+  const keys=['productos','pedidosNuevos','historialVentas'];
+  const prev=Object.fromEntries(keys.map(k=>[k,localStorage.getItem(k)]));
+  const db=await dbFotos();
+  const fotosAnteriores={};
+  for(const p of productos){if(p.fotoKey&&!Object.hasOwn(fotosAnteriores,p.fotoKey))fotosAnteriores[p.fotoKey]=await tomarFotos(p.fotoKey)}
+  try{
+   for(const [k,v] of Object.entries(d.fotos)){if(!Array.isArray(v))throw Error('Fotos inválidas');await ponerFotos(k,v)}
+   localStorage.setItem('productos',JSON.stringify(d.productos));
+   localStorage.setItem('pedidosNuevos',JSON.stringify(d.pedidosNuevos));
+   localStorage.setItem('historialVentas',JSON.stringify(d.historialVentas));
+  }catch(err){for(const k of keys){try{prev[k]===null?localStorage.removeItem(k):localStorage.setItem(k,prev[k])}catch(e){}}for(const [k,v] of Object.entries(fotosAnteriores)){try{await ponerFotos(k,v)}catch(e){}}throw err}
+  productos=d.productos;pedidosNuevos=d.pedidosNuevos;historialVentas=d.historialVentas;carrito=[];document.getElementById('ncart').textContent='0';
+  await render();actualizarContadorPedidos();alert('Respaldo restaurado correctamente.');show('catalogo');
+ }catch(err){console.error(err);alert('No se pudo restaurar el respaldo. Los datos anteriores se conservaron cuando fue posible.');}
+}
+
+iniciarElectroHogar();
+</script><script>if('serviceWorker' in navigator && location.protocol==='https:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{}));}</script><script id="eh-pull-refresh">(function(){let startY=0,eligible=false,triggered=false;document.addEventListener('touchstart',e=>{eligible=window.scrollY<=3&&e.touches.length===1;startY=e.touches[0]?.clientY||0;triggered=false},{passive:true});document.addEventListener('touchmove',e=>{if(!eligible||triggered)return;const delta=(e.touches[0]?.clientY||0)-startY;const banner=document.getElementById('ehPull');if(banner)banner.classList.toggle('active',delta>85)},{passive:true});document.addEventListener('touchend',e=>{const banner=document.getElementById('ehPull');const refresh=eligible&&!triggered&&((e.changedTouches[0]?.clientY||0)-startY)>100;eligible=false;triggered=true;if(refresh){if(banner)banner.classList.add('active');setTimeout(()=>location.reload(),300)}else if(banner)banner.classList.remove('active')},{passive:true})})();</script></body></html>
